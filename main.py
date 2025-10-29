@@ -55,6 +55,13 @@ class NamePossessionPlugin(Star):
             return
 
         if not self._is_group_allowed(int(group_id)):
+            # 明确记录被名单规则拒绝的群
+            logger.info(
+                "namepossession: deny group %s by mode=%s list=%s",
+                group_id,
+                self._group_mode(),
+                sorted(self._group_list()),
+            )
             yield event.plain_result("当前群不在可用范围（名单规则）。")
             return
 

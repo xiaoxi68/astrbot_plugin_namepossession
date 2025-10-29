@@ -4,6 +4,8 @@ import os
 import tempfile
 from typing import Any
 
+from astrbot.api import logger
+
 
 class StateStore:
     """Async, concurrency-safe JSON state store for per-group possession info.
@@ -31,6 +33,7 @@ class StateStore:
     async def _load(self) -> None:
         if not os.path.exists(self.file_path):
             await self._save()
+            logger.info(f"namepossession: state file created at {self.file_path}")
             return
         try:
             data = await asyncio.to_thread(self._read_json_file)
@@ -40,9 +43,13 @@ class StateStore:
                     taken = data.get("taken") or {}
                     if isinstance(taken, dict):
                         self._state["taken"] = taken
-        except Exception:
-            # keep defaults if corrupted
-            pass
+        except Exception as e:
+            # keep defaults if corrupted, but do not swallow silently
+            logger.warning(
+                "namepossession: failed to load state file %s: %s",
+                self.file_path,
+                e,
+            )
 
     def _read_json_file(self) -> dict:
         with open(self.file_path, encoding="utf-8") as f:
@@ -51,7 +58,15 @@ class StateStore:
     async def _save(self) -> None:
         async with self._lock:
             state = json.dumps(self._state, ensure_ascii=False, indent=2)
-        await asyncio.to_thread(self._atomic_write, state)
+        try:
+            await asyncio.to_thread(self._atomic_write, state)
+        except Exception as e:
+            logger.error(
+                "namepossession: failed to save state file %s: %s",
+                self.file_path,
+                e,
+            )
+            raise
 
     def _atomic_write(self, content: str) -> None:
         dir_name = os.path.dirname(self.file_path)
