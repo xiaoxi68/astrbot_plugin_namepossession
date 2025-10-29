@@ -1,22 +1,22 @@
 {
   "auto_enabled": {
-    "description": "是否启用定时随机夺舍（仅修改机器人自己的群名片）",
+    "description": "是否启用随机夺舍",
     "type": "bool",
-    "default": false
+    "default": true
   },
   "group_mode": {
-    "description": "群名单模式（whitelist/blacklist/none）",
+    "description": "群名单模式",
     "type": "string",
     "options": ["whitelist", "blacklist", "none"],
     "default": "none"
   },
   "group_list": {
-    "description": "名单中的群号列表（数字或字符串均可）",
+    "description": "名单中的群号列表",
     "type": "list",
     "hint": "示例: [123456, 234567]"
   },
   "auto_interval": {
-    "description": "定时随机夺舍的随机间隔区间（单位：分钟）",
+    "description": "随机夺舍的随机间隔区间",
     "type": "object",
     "items": {
       "min_minutes": {
