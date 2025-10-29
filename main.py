@@ -13,8 +13,8 @@ from .storage import StateStore
 
 @register(
     "namepossession",
-    "Codex",
-    "随机夺舍 QQ 群友名片（修改机器人群名片）",
+    "薄暝",
+    "随机夺舍 QQ 群友名字（群名）",
     "1.0.0",
 )
 class NamePossessionPlugin(Star):

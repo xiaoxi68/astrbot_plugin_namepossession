@@ -1,6 +1,5 @@
 name: namepossession
-desc: 随机“夺舍”QQ群成员名片（仅修改机器人自己的群名片）。
+desc: 随机夺舍 QQ 群友名字（群名）。
 version: v1.0.0
-author: Codex
-repo: https://example.com/astrbot-namepossession
-
+author: 薄暝
+repo: https://xiaoxi68/astrbot_plugin_namepossession
