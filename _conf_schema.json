@@ -1,0 +1,35 @@
+{
+  "auto_enabled": {
+    "description": "是否启用定时随机夺舍（仅修改机器人自己的群名片）",
+    "type": "bool",
+    "default": false
+  },
+  "group_mode": {
+    "description": "群名单模式（whitelist/blacklist/none）",
+    "type": "string",
+    "options": ["whitelist", "blacklist", "none"],
+    "default": "none"
+  },
+  "group_list": {
+    "description": "名单中的群号列表（数字或字符串均可）",
+    "type": "list",
+    "hint": "示例: [123456, 234567]"
+  },
+  "auto_interval": {
+    "description": "定时随机夺舍的随机间隔区间（单位：分钟）",
+    "type": "object",
+    "items": {
+      "min_minutes": {
+        "description": "最小分钟数",
+        "type": "int",
+        "default": 60
+      },
+      "max_minutes": {
+        "description": "最大分钟数",
+        "type": "int",
+        "default": 480
+      }
+    }
+  }
+}
+
