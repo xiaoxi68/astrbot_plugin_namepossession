@@ -1,5 +1,5 @@
-name: namepossession
+name: astrbot_plugin_namepossession
 desc: 随机夺舍 QQ 群友名字（群名）。
 version: v1.0.0
 author: 薄暝
-repo: https://xiaoxi68/astrbot_plugin_namepossession
+repo: https://github.com/xiaoxi68/astrbot_plugin_namepossession
