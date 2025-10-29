@@ -30,7 +30,7 @@ class NamePossessionPlugin(Star):
 
     async def initialize(self):
         """Optional async initializer."""
-        pass
+        await self.store.initialize()
 
     async def terminate(self):
         if self._auto_task and not self._auto_task.done():
@@ -68,7 +68,7 @@ class NamePossessionPlugin(Star):
             return
 
         target_id, target_name = ret
-        self.store.set_taken(str(self_id), str(group_id), target_id, target_name)
+        await self.store.set_taken(str(self_id), str(group_id), target_id, target_name)
         yield event.plain_result(
             f"本次夺舍对象：{target_name}（{target_id}）。已修改机器人群名片。"
         )
@@ -80,7 +80,7 @@ class NamePossessionPlugin(Star):
             yield event.plain_result("仅限群聊使用。")
             return
         self_id = str(event.message_obj.self_id)
-        taken = self.store.get_taken(self_id, str(group_id))
+        taken = await self.store.get_taken(self_id, str(group_id))
         if not taken:
             yield event.plain_result("当前群暂无夺舍记录。")
             return
@@ -94,22 +94,14 @@ class NamePossessionPlugin(Star):
 
     async def _auto_loop(self):
         # 随机间隔循环：在配置区间内随机等待，然后挑选一个可用群执行一次夺舍。
-        try:
-            from astrbot.api.event import filter as _f  # for PlatformAdapterType
-        except Exception:
-            _f = None
-
         while self._is_auto_enabled():
             try:
                 # sleep 随机配置间隔
                 sleep_sec = self._random_sleep_seconds()
                 await asyncio.sleep(sleep_sec)
 
-                if _f is None:
-                    continue
-
                 platform = self.context.get_platform(
-                    _f.PlatformAdapterType.AIOCQHTTP
+                    filter.PlatformAdapterType.AIOCQHTTP
                 )
                 if platform is None:
                     continue
@@ -130,7 +122,7 @@ class NamePossessionPlugin(Star):
                 ret = await self.service.random_possess(client, gid, self_id)
                 if ret:
                     user_id, name = ret
-                    self.store.set_taken(str(self_id), str(gid), user_id, name)
+                    await self.store.set_taken(str(self_id), str(gid), user_id, name)
                     logger.info(f"auto possession in group {gid}: {name}({user_id})")
             except asyncio.CancelledError:
                 break
