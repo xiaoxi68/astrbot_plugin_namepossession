@@ -88,5 +88,11 @@ class NamePossessionService:
         if not await self.set_group_card(client, group_id, int(self_id), target_name):
             return None
 
+        # log after successful rename
+        logger.info(
+            f"namepossession: set_group_card success group={group_id} self={self_id} "
+            f"new_card='{target_name}' from user={target_id}"
+        )
+
         await self.poke_user(client, group_id, target_id)
         return target_id, target_name
